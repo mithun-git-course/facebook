@@ -1,0 +1,153 @@
+
+DOCKER TUTORIAL >>>
+---------------------
+24/12/22 - AshokIT
+
+Day1
+
+-Collection of software programs is called software project
+-For any application we need 1 front end,2 back end and 3 batabase
+-To run application we need code,java jdk11,webserver,springboot,mysql
+-we are running our code in diff env like dev,sit(system integrate testing),UAT(user application test),pilot(pre-prod)
+production
+-If u wanna deploy and run the application in diff env, we need to install java,dependencies,springboot,mysql,web servers
+-but practically it is very difcult and time consuming process
+-so we need a proper solution for this problem to make ,it must be like a box and put togather all thse in one place
+so that we can run easly in any env
+-we can't deploy  our application directly to production env
+- environment dependencies issues acurred when u deploying to diff env
+
+-DOCKER has the solution for this envrironmental dependecies isses ,
+-It is making the package to run the application to diff env so easily
+-docker is making a box and putting all togeather in that ,that box is called container..
+-hypervisor is a platform ,on top of that we can install n number of  guest OS's  1 red hat,2 ubuntu,3centos
+-hypervisor is sitting on host operating system
+-Containers no need of hypervizor and guest OS,docker has docker engine it will build container
+for our application
+-virtualizaion need hypervisor on top of that we need to install guest OS and then
+ deploy application and dependenies
+
+CONTAINERIZATION>>>>
+----------------------
+-Containerization is a process where we can build a package to run our application with
+application code ,softwares versions,libraries,modules,os and dependecies
+-container is taking care of everythig to run our application
+-we can run our application in multiple environmets and diff machines
+-docker is containerization software ,easly shipable
+-Using docker we are going to create containers
+-your complete project as a container
+-docker container will taking care of software dependecies and modules and libraries
+-
+
+
+DAY2:>
+------
+--for each application we need to install one os if 3 app 3 os
+-containers are very light weight,and booting time is very fast,better utilization
+-size ,startup,integration VM VS CON elephant RAT,thabelu cheetah,headeche smile
+-Docker is packaging ,deploying and running our application
+-
+-docker file:>>
+-what r the dependencies ,softwares and versions required we will mention in docker file
+-eg:java,web server,databse
+-docker file is nothing but info about application
+-docker file is information whcih required to run the APPLICATION OR PROJECT
+-if u build the docker file ,docker image will created
+-when docker image created ,we gonna create docker container
+-
+DOCKER FILE >> DOCKER IAMGE >> DOCKER CONTAINER >>
+------------------------------------------------
+-DCOKER file is a configuration service to build the d image
+-docker hub is remote place where we can store our images in the docker hub
+-docker registry is a repository
+-docker cleint is a building ,pulling and running the docker cleint
+-
+
+LAB>>>>
+- INSTALL ec2 instance as docker-server
+-open terminal install docker
+-$sudo yum install docker -y
+-sudo service docker start
+-docker info >but permission denied ,how to resolve?
+-add docker group to ec2 user
+-$sudo usermod -aG docker ec2-user
+-now  restart come back to ec2-user $cnt+d then relogin and see docker info now u r granted
+- to know the docker images $docker images or docker image ls
+-to know the docker container $docker container ps
+-docker -v > which version?
+-dcoker hub to pull and push the images
+-
+-docker pull image name or id
+-dcoker login to login docker hub
+-docker pull or run imagesID
+-dcoker rmi <images name or id >to delete
+-to run docker images $docker run images id
+-
+
+Day3..>>>>
+-Docker file contains instructions to create image by using some speacial keywords
+-dcoker images is package whcih is everything to run the application like
+code,software ,versions,modules,dependencies,env .nothing but full pack
+-Docker container is runtime instance of docker image.our application run or execute only on container.
+-Docker registry is remote rep to store our images
+-DOCKER ENGINE is a software where we create images and containers
+-Nexus,jfrog,aws ecr,dtr are private registry to store the images we build
+-
+----when docker server connecting use theese commands
+--------------------------->>>>>>>>>>>>>>>>>>>>>>>>>
+-docker -v,docker info,docker ser
+
+-sudo service docker start >>>to start the service
+-to delete the image $docker rmi dID -f
+-u can create an image even without mentioning pull command
+-$docker run mysql
+-first it will check in local if unable to find then going tp library and pulling
+-
+
+How to create our own docker images>>>>
+------------->>>>>>>>>>>>>>>>>>>>>>>.>>>>>>>>>>>>>>
+-first we need to login to our ec2 instance by login credentials of docker hub
+-let's create docker file to create image
+-sudo vi Dockerfile
+-FROM ubuntu,RUN echo "hello",RUN echo "arun",CMD echo "images"
+-Now create an image from docker file $dokcer build -t
+tag-name . (dot is searching for the file in urrent directory
+-
+
+-now push the image to docker public hub
+-first we need to tag to that image
+-$docker tag myfirst-img arunponugotii/myfirst-img
+-$docker push arunponugotii/myfirst-img #now see in docker hub,yes done..
+-now all diff envs can pull this image and excute it within secounds ,diff machines around the world
+-
+
+-DOCKER IMAGES IS A FULL PACK WHEREEVERYTHING IS AVAILABE TO EXECUTE THE APPLICATION.
+-Now u don't need to install java,tomcat,dependencies to run the application u already configured in dockerfile
+-
+-
+
+>>>DOCKER FILE>>>>>>
+-------------------
+-Docker file set of keyword to build the image
+-In docker file we use DSL(domain specific language )keywords
+- docker engine proccess the dockerfile instructions from top to bottom
+-FROM,RUN,MAINTAIN,CMD,VOLUME,COPY,ADD,ENTRYPOINT,ENV,LABEL,USER,WORKDIR,EXPOSE,
+-FROM ,MAINTAINER,ADD,COPY,CMD,RUN,ENTYPOINT,ENV,LABEL,EXPOSE,VOLUME,USER,WORKDIR
+-FROM,MAINTAINER,COPY,ADD,CMD,RUN,ENTRYPOINT,ENV,LABEL,USER,WORKDIR,EXPOSE,VOLUME
+
+-FROM keyword:pulling the base image and on top of that we will create our own image
++++++
+sytax : FROM <image-name> FROM ubuntu,mysql,tomcat:9.2,java:jdk-1.8.0
+
+-MAINTAINER:who is the author of this file arun <arun.gmail.com>
++++++++++++
+COPY :to cpoy the file or folder
+++++
+
+
+
+
+
+
+
+
