@@ -1,0 +1,78 @@
+>>>23/12/22
+mithun technology
+
+Git Administation Roles and responsabilities
+
+-first create org,then creat repository as facebook nd amazon ,create teams and team members and give repository's access to team
+
+-Git commands:
+
+-First u have to write a git empty repository in local machine and give git init cammand to initialize the git 
+-go to desktop folder in data D in that open desktop and git right click and open git bash then create a folder called facebook 
+to save the file in desktop
+- git init
+Initialized empty Git repository in D:/Desktop/facebook/.git/
+- when u inicialize it will create a master branch automatically
+-now created .git file it is a hidden file
+-so now git init creats 3 logical areas like WORKING AREA ,STAGING AREA ,LOCAL REPOSITORY.
+-When u create a file ,it will store in working area ,off course it is in folder 
+-to check it type git status ,it will shows like un tracked ffiles and in red colour
+-created first file as first-file ,it was showing like untracked file in red
+-
+2nd stage staging area:
+-git add .
+git add *
+git add fileName
+-I gave command like git add file-name
+-it was showing like first-file in green ,secound is in red
+-If u wanna send it back to working area or untracked files use the command $ git rm --cached first-file
+-for the first time u r openeing account so u have to do some configurations before commit the file
+-git config -global user.name "Arunponugotii"
+-git config -global user.email "arunponugoti2565@gmail.com"
+-to check if configured or not git config --global --list
+-uncompleted files are in working area,,completed files are in tracked or staged area,,whatever files are there we were commited they are ready to send to the remote area they are called local repo.
+-git commit command $git commit -m "description" file name (if u dont mention it  will commit all the files)
+-If u wana see git commit status $git log
+
+
+-Now its time to push loacal repositories to remote repository
+- git remote add -v to check wheather added or not
+-git remote add alias name and clone the facebook url http
+-fetch ->getting the code from remote to local
+-push -> pushing the code from loacal to remote
+-now u can send the code file from local to remote which commited files
+-git remote add facebook git url
+-To push the code to remote command $git push facebook arun-master(while installing i saved my branch like arun-master)
+-if u are creating in new account it will ask first time username and password
+-now u can see  the local files in remote area(Github)
+-now push the secound file to remote area
+-git add secound-file
+-git commit -m "2nd file updating" secound-file
+-git push facebook arun-branch (Evrytime u have to git remote repository's alias name,dont mention files or directories name"
+-now u wanna update a file by writing new lines of code 
+-go to local repo and open the first-file and write something
+-when u update it will become automatically untracked file so u have to do staging area nd commit for that
+-git add -a -m "2nd time updating thias file" first-file
+so now it will become commited
+-when u are updating 2nd file u can do it two step procces in sigle step
+-how to know how many commits u did ? ans : git log ,git commit history
+-In git log command u could know that who is author,when it was updated
+-u can see when u were comited something ,delete "-" sybol,add + symbol
+-if u wanna see what was u coomited with commited ID $git show e739d
+-we need to find the commnad that we have to get commited file to untrackked file or working area 
+-If i want to remove one commit or letest one commited we have a revert command 
+-git revert commit ID
+-git push facebook master -f :> need ti know 
+-
+
+>>>>24/12/22
+
+-to remove working area file $ git clean -f or -n ,it won't remove tracking files
+-if u wanna tracked files to be  untracked then use the command $ git reset file name become red colour
+-
+-  .gitignore #add files in .gitignore file and push it to remote repo
+-git revert is imp command to delete the remote file so be care full
+-
+
+
+
