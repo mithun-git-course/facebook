@@ -143,6 +143,85 @@ sytax : FROM <image-name> FROM ubuntu,mysql,tomcat:9.2,java:jdk-1.8.0
 +++++++++++
 COPY :to cpoy the file or folder
 ++++
+sytax: COPY <source> <destination> .war file is stores in target file but we need mv .war file to webapp file 
+to run the application in tomcat server COPY target/mvn-web-app.war  /user/local/tomcat/webapp/mvn-web-app.war
+
+-ADD:add keyword also used to copy the file ,but it is from brower(http)remote location to dockerfile
+++++
+if u add file to copy a remote file it will automatically extract the tar file,not zip files to unzip
+syntax:ADD <http file > <destination>
+-
+RUN:it is used to execute commands on top of base image ??  
+++++
+Run command executes when u creating the images
+RUN is a executable command like creating a file ,RUN mkdir workspace-file,RUN yum install git
+
+CMD:It is also executable command ,but for container,CMD command execute while containers are creating
+++++
+
+-git install on top of image ,but tomcat shoild execute only while creating container (later)
+====git=image,,tomcat =====container
+-container execution means application execution
+-multiple RUN commands will execute ,but multiple CMD commands won't 
+-last command will only execute
+- 
+-to build images from docker file :
+$docker build -t imageone
+-to run the image :
+$docker run imageone #we can override the CMD command by using runtime CMD
+
+$DOCKER RUN imageone date
+#it will print only date(CMD not executing)
+
+-how to change dockerfile?
+$mv Dockerfile 	Dockerfilew-one 
+-create image after changing the name
+$docker build -f Dockerfile-one -t imagetwo .(-f must)
+
+ENTRYPOINT:it will execute while creating container,we can't override it
++++++++++++
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
 
 
 
