@@ -1,0 +1,12 @@
+---
+services:
+  mydb:
+    environment: MYSQL_ROOT_PASSWORD:ARUN
+    image: mysql:5
+  mysite:
+    image: wordpress
+    links:
+      - mydb: mysql
+    ports:
+      - 9090:80
+version: "3"

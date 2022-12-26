@@ -181,6 +181,257 @@ $docker build -f Dockerfile-one -t imagetwo .(-f must)
 ENTRYPOINT:it will execute while creating container,we can't override it
 +++++++++++
 
+WORKDIR:WORKING DIRECTORY
++++++++++
+-where we want to launch our application ,we can specify
+sytax: WORKDIR <dir-path>
+-all dockerfile instructions which are running in WORKDIR ,after u specify
+-Whatever command u given in dockerfile they are going to execute after WORKDIR
+-It is used while working with tomcat,start.sh whcih is in bin directory so u have to change the configure
+-
+ENV:Is used to set the invironmet variables ENV <KEY> <VALUE>
++++
+
+LABEL: IT IS USED TO ADD META DATA FOR OUR IMAGE
++++++
+ -label will represent key value pair
+
+ARG:it is used to avoid hard coded values in dockerfile
+++++
+
+USER:we can set user for image/container
++++++
+Note:
+
+
+EXPOSE:about ports and rules for container running
++++++
+
+VOLUME:it is used for storing the data
++++++
+
+Container
++++++++++:Create a container with docker images which was created by dockerfile name is called springboot
+-$docker run -d -p 8080:8080 con-name
+
+
+DAY5: How to build .war file
+-create a folder with name ,navigate to that folder
+-clone the code and $mvn clean package
+-now it will biuld the code
+-now create an image with that .war file and run container that's it
+-if java application devloped by springboot u dont need .war file,if not u need .war file ??
+-to run container:>>> $docker run -d -p 9000:8080 #9090:8080 image-name .
+        +++++++++
+
+
+-PROJECT -2
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+-python-fask-application
++++++++++++++++++++++++++++
+-DOCKER FILE
+https://github.com/ashokitschool/python-flask-docker-app.git
+FROM python:3.6
+
+MAINTAINER Ashok Bollepalli "ashokitschool@gmail.com"
+
+COPY . /app
+
+WORKDIR /app
+
+EXPOSE 5000
+
+RUN pip install -r requirements.txt
+
+ENTRYPOINT ["python", "app.py"]
+
+-expose 5000 is container code ,u can't change ,but u can change host port number
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+-to delete all the containers $docker system prune -a #STOPED AND UNUSED IMAGES
+-$docker ps -a all show
+-$docker stop continer ID
+-$docker rm con ID # TO REMOVE
+-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++
+DOCKER VOLUMES:
++++++++++++++++++++++++++++>>>>
+-To store the data
+--If a container creates some data which is stored in database and if it is killed or terminated automatically
+that data will lost,=
+-that's why to solve this DOCKER VOLUMES came into the picture ,
+-docker volumes helps us to share our data from con to con
+-why do we need to share our data from one con to anothe con ??
+-docker volumes stores in docker host machine (aws ec2 or lambda)
+-docker volume:>> Container generated data it will stores and sending it to the other docker containers also
+-Even u  deleted the docker container ,docker container won't delete
+-backup data and sharing
+-where will be we store our docker volumes in aws
+-
++++++++++++++++++++++++++++++++++++
+MICROSERVICE BASED APPLICATIONS :-
+++++++++++++++++++++++++++++++++++++++
+-EX:Product purchased container is gererating the container
+-in one docker volumes 
+-application tracking system need to get data from product purchased con to track 
+-For thatdocker volume database will help us to share from produt purch cont to applic track contai
+-
++++++++
+docker commands
++++++++++++++++++++++
+-docker volume --help #to know more about commands
+-we have mainly 5 commands in docker volumes
+-1 create #docker volumes 	will cretes
+-2 inspect # display all the info about volumes
+-3 ls #to list out the volumes
+-4 prune #to delete all unused volumes
+-5 rm #to dlete one or more volumes
+-
+- docker run --name=web-app -d -p 8080:80 nginx
+c7b85805b5a19f3746f2bf7f3eadd092a7ac6586d1e7e4cd92fdce5609d6014b
+--web-app is my container name
+-to change the content inside of container >>>>>
+-docker exec -it web-app bash #opening to in bash 
+-it will go to container machine from host machine here u can write anything which will belongs to container
+-root@c7b85805b5a1:/# #it is container machine
+-cd /user/share/nginx/html
+-u gonna see index.html
+-echo "hello arun welcome to nginx" > index.html
+-represh the webpage of ip adress
+- but if u stop or terminate this container then data will be gone ,if u create new container it will not retrive 
+-so we need to store data for aother container
+-so we need to attach docker container to docker volume 
+-$docker volume create new-vol
+-to mount docker container with docker volume
+-$docker run -d --name=web-app2 --mount source=new-vol,destination=/user/share/nginx/html -p 8080:80 nginx
+-change some content in new docker container
+-$docker exec -it we-app2 bash 
+-$cd /user/share/nginx/html
+-echo "hello arun for docker volume" > index.html
+-now stop the this container and create anethor container
+-$docker run --name=web-app3 --mount source=new-vol,destination=/usr/share/nginx/html -p 8080:80 -p nginx
+
++++++++++
+DAY-6
+++++++++++++++++
+
+-MOUNTING TO DIRECTORY 
+-it is same as docker volume but there is small diff ,if u wanna store data in directory it is usefull,s
+   storing data in local machine
+-$mkdir -p /tmp/nginx/html
+-navigate to that directory
+-docker run -t -d -p 80:80 -v /tmp/nginx/html:/usr/share/nginx/html --name c1 nginx:latest
+-docker container ls
+-create index.html > whatever data u created in local it will shows in web server,what ever content container
+  created it will shows in local directory
+- docker container is by defualt stateless container #data will delete if container delete,
+-statfullness we have to do with docker volume nad binded mount (directory)
+
+
++++++++++
+- what is virtualization,containarization,what is docker ,advantages,files,images,containers,volumes,mounting,
+dockerr terminlogy,commands,bind mount,spring boot docker file ,
+
+
++++++++++++++++++++++++
+++++++++++++++++
+Monolith  vs Microservise
++++++++++++++++++++++++++
+-90% containers are microservice based containers
+-Monolith means we are creating only one container for our application to run our app
+-but microservices we need to run lot of containers to run app
+-
+
+
+
++++++++++++
+Docker compose
+++++++++++++++
++++++++++++++++++
+-it is a tool to manage multi container based applications
+-Now a days we are devloping applications using microservices with the help of API's
+-every api is a saperate project
+-Running multiple containers manually is defcult task .
+-Using docker compose we can deploy multi containers to run our applications
+-out project need 100 containers to run at a time order by order docker compose make it possible 
+-
+<<<====>100 API>>>>>===>>100 Microservices>>====>100 Containers>>====>Docker compose>>
+-docker compose running containers using YAML scripts
+-
+Sample docker composeYAML:
+version:
+services:
+network:
+volumes:
+ 
+docker compose file name:docker-compose.yml
+#to create and start the container
+$docker-compose up
+$docker compose ps $to know how many containers 
+$docker compose down #to stop and remove
+$docker compose images # images ls
+$docker -compose -f <fname> up
+
++++++++++++++
+docker -compose install
++++++++++++++++++++++++
+Docker CE Install
+sudo amazon-linux-extras install docker
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+Make docker auto-start
+
+sudo chkconfig docker on
+
+Because you always need it....
+
+sudo yum install -y git
+
+Reboot to verify it all loads fine on its own.
+
+sudo reboot
+
+docker-compose install
+Copy the appropriate docker-compose binary from GitHub:
+
+sudo curl -L https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+NOTE: to get the latest version (thanks @spodnet): sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+
+Fix permissions after download:
+
+sudo chmod +x /usr/local/bin/docker-compose
+
+Verify success:
+
+docker-compose version
+
+++++++++++++++++++++++++++++++++++++++++++++++
+-now create a docker compose project by using mysql and wordpress and attach them to store the data from wordpress
+-Docker-compose is linking the two diff containers like product cont link with db container,and tracking con
+also linking with db cont,cart con also link with db container
+-
+-#for installing  mysql by using docker-compose
+$https://medium.com/@chrischuck35/how-to-create-a-mysql-instance-with-docker-compose-1598f3cc1bee
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
