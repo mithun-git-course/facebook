@@ -414,6 +414,176 @@ also linking with db cont,cart con also link with db container
 -
 -#for installing  mysql by using docker-compose
 $https://medium.com/@chrischuck35/how-to-create-a-mysql-instance-with-docker-compose-1598f3cc1bee
+
+
+
+########################
+DOCKER Networking:
+#####################
+-Docker networking is about communication between two containers
+-docker networking is providing security and isolation to containers
+-docker networking is providing single operation system to many containers in a isoalation manner
+-it helps to delever the service very fast
+-Aplication portability can happned by using docker networking
+-when u install docker 3 default networks configring 
+-1 none ,2 host ,3 bridge
+-We can configure one container to many networks to communication purpose
+-Docker is providing networks to containers by using docker network divers
+
++++++++++++
+-Network drivers
+++++++++++++++++++++==
+-Bridge 2 host 3 none 4 overlay 5 Macvlan
+-Bridge driver:this is default driver for docker host machine,
+-It is very helpfull when u r running standalone container(single) 
+$docker network inspect bridge #more detailes
+-
+Host driver:
++++++++
+-it is very helpfull when standalone container available #not defualt
+-The container will not get any IP adress when u enable Host driver
+-it is comming with 80 port number ,in this case we dont need to map  many containers to one port number
+to host machine port
+
+-The advantage of this network driver is when u r using many containersn\
+
+-Non driver:no network to acces to container
+
+-overlay container:
+++++++++++++++++-
+
+-we use overlay network driver for docker swarm
+-
+macvlan driver:Assigning MAC address  to containers
+-it is simplifing the communication between two containers
+-
+
+++++++++++++
+Docker commands
++++++++++++++
+-docker network ls
+-docker network inspect bridge #more info
+
+-We can create our own bridge network
+-$docker network create --driver bridge my-bridge-network
+-$docker network create --driver bridge my-network-bridge 
+
+-#Run the container using custom network <my-network-bridge>
+-$docker run -d --name my-nginx --network my-network-bridge -p 8080:80 nginx
+-Now container created and attached with my custom network my-network-bridge
+-#To see $docker network inspect my-network-bridge
+
+#to delete all running containers
+$docker rm -f $(docker ps -aq)
+
+#now creating two cotainers and attaching one network to them and tesing
+-$docker run --name nginx30 -d --network my-network-bridge -p 8080:80 nginx
+-$docker run --name nginx31 -d --network my-network-bridge -p 9000:80 nginx
+-For each container having one IP address
+-how to get that ip adress
+-$docker inspect -f '{{range.NetworkSettings.Networks}} {{.IPADDress}}{{end}}'nginx30 
+-$docker inspect -f '{{range.NetworkSettings.Networks}} {{.IPAddress}}{{end}}' nginx31
+
+- #now try to ping one container to another containerr with IPadress
+-docker exec -it nginx30 /bin/bash
+-root$ apt-get update
+-$apt-get install iputils-ping
+$now $ ping 172.19.0.3 do same to another container
+$
+
+########
+Running container with host network driver
++++++++++++++++++++++++++++++++++++++
+- port mapping is not requierd ??
+
+
+
+################
+DOCKER SWARM:-
++++++++++++++++++
+-Docker swarm is a Orchestration tool for running containers
+-Handling the failovers,managing the process of contaiers like load balancing,Auto scaling
+-Docker swarm is setting up docker cluster
+-What is cluster ? Running our application in multiple nodes or server is called cluster or container
+-In the cluster Architecture we have one master node nd 2+ slave nodes
+-Master nodes is managing and executing the application of slave nodes
+-slave nodes are nothing but application servers 
+-Master node sceduling and assign the work to slave nodes
+-we r not running our application in master nodes ,to run our app we use slave nodes
+-If one slave node is failed master node will create another node to run our application,
+-But if our master node is failed entire system collapsed
+-For better performance of master Orchestrtion we have a formula called Quarm (n-1)/2
+-if u created two master 2-1/2= .5,not even single machine
+-so preffer three master nodes 3-2/2=1 # 1 master is highly available even one master node is failed
+-
+-+++++++++++++
+Install Docker swarm in 3 machines
+++++++++++++++++++++++++++++++++++
+-$curl -fsSL https://get.docker.com -o get-docker.sh
+-$sudo sh get-docker.sh
+- $sudo docker info
+#docker swarm is inactive
+
+-How to make a normal node to be master node?
+-When u run a command called init that will become master node
+-sudo docker swarm init -advertise-addr Private-IP of current machine to whom u attach
+-Now it is a manager of all the docker slave nodes
+-If u wanna more managers for haigh available below cammad run with sudo u gonna get 
+-docker swarm join-token manager #after u created one manager node then it shows
+-if u wanna add more nodes for ur manager then run the command
+-$docker swarm join-token worker #after 
+-Now to to docker info and see swarm will be active and manager will be true
+-
+
+===========================
+Deploy applicationas a service  using docker swarm
+=================================
+-Docker swarm service
+-if i use docker run command to create container it will only create in one container
+-but we need our application in multiple server nodes
+-
+-docker swarm service is colletion of many containers of same image
+-there are two types of swarm services -1 Replica 2 Global
+
+-To create a container for cluster
+
+-$sudo docker service create --name java-web-app -p 8080:8080 ashokit/javawebapp
+-Now onwards u have to check like docker service
+-docker service ls #for containers
+-3.108.64.161:8080/java-web-app/ #publicIP brows it was done succesfully
+-Replica means how many nodes are running
+-by defualt one replica gonna created
+-Check how many nodes are running my Application
+-$sudo docker service ls ,here u see replica how many nodes are running
+-To inspect how many replicas are running
+-$sudo docker service inspect ps java-web-app #container name
+-If u wanted one docker remove
+-$sudo docker swarm leave
+now check 
+-$sudo docker service inspect ps java-web-app   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 
 
