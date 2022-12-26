@@ -1,0 +1,77 @@
+Kubernetes :
+============----------by AshokIT
+
+-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>Kubernetes Architecture:- by Sreeharsha Veerapally
+
+-k8s admin: i want to deploy sample app with 6 containers
+-First go to k8 control plane/master server
+-First we have to contact with k8 API SERVER
+-Pods are running under k8 API server ,pods are nothing but containers
+-kubectl->kubernetes command line tool like shell to automate the commands 
+-jube API server is very imp ,it acts like gateway(managing) ,without appoval we cant do anything
+-whatever the contect which sent to APIserver ,ETCD will store all the data which was comming from api server and it acts like database
+-worker nodes are nothing but slaves,k8 control plane is controling the worker nodes
+-Kubelet is act like manager for the nodes,kubelet sits in every node,without kubelet  involvement u can't do anything
+-kube-scheduler acts like PA to K8 api server,it is giving tasks to kube-scheduler to do things like when api server is gettting anything from 
+k8 admin it will ask that check it once is it ok not to kube-scheduler
+-kube-scheduler acts like monitor tool only for K8 API server
+-kube-scheduler gives response to k8 API SERVER's request
+-k8 Admin > k8 API server >k8-ETCD >k8API SERVER >kube-scheduler>response k8-API server > k8-API server giving tasks to KUBELET to do the things
+-now kubelet will deploy the containers in pods
+
+-KUBE -CONTROL -MANAGER:
+-kube control manager is acts like monitoring the tool,it is a combination of certain services,
+--eg:if a master node  failed it will replaces those pods to another master node
+-In kube-control manager we have mainly 4 services 1 Node controller,2replication controller,3 End point controller,4 secret-config,
+-it is conneting to K8 api server
+
+-KUBE PROXY:
+-kube proxy is sitting in each node including master node
+-kube proxy main job is handling the traffic
+-it is implemanting the network rules like tcp udp http https 
+-stoped  in 1hour
+
