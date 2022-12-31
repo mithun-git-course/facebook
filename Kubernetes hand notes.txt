@@ -1,7 +1,332 @@
 Kubernetes :
 ============----------by AshokIT
 
+-Docker swarm can't do auto scaling
+-Kubernates have great community edition,
+-k9s will done Auto scaling and load balancing so that's why most of the people use k8s insted of swarm
 -
+K8s is production-grade Orchestration engine to deploy the containers
+-
+-k8s feature:
+=============
+-Automated sceduler:assign the work it will take care of that
+-Automated Scaling
+-Self healing capabilities #if 1 node die or killed it it wont send to cleint untill it become healthy
+-Automated rollbacks nd rollouts:If u updated ur application code ,it doesn't work well as u expected
+then u can rollback the updation which u made,it doen't required to kill the instances or servers stop,
+this feature give u compititive advantage in this eco-system 
+
+-storage Orchestration:Automatically store the data by ur choice local or cloud likeaws,gcp
+-service descovery:load balaning
+-
+
+
+==================
+Kubernetes Architecture:
+=============
+
+-K8s works as cluster
+-In cluster we have master nodes nd slaves
+-master node is managing and monitoring,assign the works the slave nodes
+-master nodes
+-worker nodes
+
+Control plane
+==============
+-API server
+-Kube-Sceduler 
+-Controler manager
+-ETCD
+
+Worker Node
+=============
+-PODS,Container
+-kublet,kublet
+-kube-proxy
+-Docker runtime
+--kubctl 
+
+kubectl
+user interface
+
+==============================
+Control plane is a Master node
+=============================
+-API server
+-Scedulr
+-Control manager
+-ETCD
+
+
+
+=============
+Worker node:
+============
+-in worker node Docker run time available ,and containers running on Docker run time
+-Containers lies in PODs,Collecton of container 
+- N of Pods are running on docker runtime
+-Kubelet is available
+-Kube-proxy is available
+
+
+=====
+Cluster:>>>Control plane or Master node AND Worker node is called CLUSTER.
+============
+
+Managing k8s cluster two ways 
+1 user interface (website) 
+2 Kubectl (CLI) linux commnads
+=====
+
+===========
+-To communicate to  Cluster we have kubectl ,user interface
+-Manager node manage and assign work to worker node
+-worker nodes run task given by master nodes
+- 
+============
+API Server :Kubectl is talk with API server,it ia communicator
+===========
+-In k8s cluster we have some services or objects
+-PODS
+-Replication controller
+-Replication Set
+-Deamon Set
+-Deployment
+-volumes
+-services 
+which was written using GO lang
+
++++++++++++++++++++
+
+ETCD
+======
+:It is a storage service ,Database
+-API server gets request from kubctl and storing that requst in ETCD
+-works as key =value pair
+-
+-========
+Sceduler
+========
+-Sceduler check in ETCD ,Is there any pending requests are there
+-It will scedule PODS to execute which are stored in ETCD
+-Sceduler scedule the PODs on nodes with the help of kubelet(sits in worker nodes)
+-Sceduler is talking with kubelet to check the resource to run the applications
+-
+
+========
+Kubelet 
+========:is a node agent to the node,acts as personal Assistant.
+-Everthing enter into the nodes through Kubelet
+-Giving info about containers r running healthy or not
+-kubelet interact with runtime(Docker) to create container in PODs
+-
+==========
+Kube-Proxy
+============:It is about to configure the network rules for the pods
+-Kube-proxy is maintaning the traffic rules for the PODS,
+-It is nothing but filewall for the PODs
+-
+=======
+Controller manger:It is doing things high level like cluster level
+===================:is responsable to to do list like finishing the tasks
+-It performs cluster leval operations
+-we have several controllers in k8s
+-Node controller 
+-Replication controller
+-Endpoint point controller
+-Deployment controller
+=kUBERNETES Namespaces 
+-
+
+===
+POD
+====:A pod is a smallest execution unit  in kubernates 
+-One pod can have multiple containers ,but how ?/
+-Multiple APIs are become multiple containers they are grouped as one POD
+-pods can run single or multiple containers
+-
+-Resource sharing:putting mutiple containers in one pod to sharing the resource
+-If we need to run our application we need to build pods
+
+-We can create our pod in two ways
+-1 Intaracrive way:using commnads <With Kubectl $kubectl run --namejavawebapppod --image=ashokit/javawebapp
+-2 Declarative way approch:Manifest file.yml we can create pod
+-apiVersion:like api v1 v2
+-kind:purpose of this file
+-metadata:Dat about data,label
+-spec:specifications
+
+
+=========
+Setup K8s
+============
+-we have two ways to set up our k8s cluster
+-1.Self managed k8s cluster #we have to create from scrach
+-2.Provider managed k8s cluster #cloud provides will set up master node
+
+-To set up self managed k8s we have two ways
+-1 mini kube9practice purpose)(single node k8s cluster)
+-2 Kubeadm #Multi node k8s cluster)
+
+============
+Installation of Kubernetes:
+==============================
+-Install 3 ubutnu machines
+
+++++++++++++
+1.Install Docker:
+++++++++++++++++
+-sudo apt-get update
+-sudo apt-get install docker.io
+-docker --version
+-sudo username -aG docker $USER
+-sudo systemctl start docker
+-sudo systemctl enable docker
+
+++++++++++++
+2.Install Kubernates:
+++++++++++++++++
+-sudo apt install curl
+
+#Add GPG kubernetes key with the command
+-$curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg|sudo apt-key add
+
+#To add xenial kubernetes repository
+$sudo apt-add-repository "deb https://apt.kubernetes.io/kubernetes-xenial main"
+
+#installing kubeadm (Kubernetes admin)
+$sudo apt-get install kubeadm kubelet kubctl kubernetes-cni
+
+#run the command below to check whether the versions of the components installed are compatable 
+$sudo apt-mark hold kubeadm kubelet kubectl kubernetes-cni
+
+#check kubeadm version
+$kubeadm version
+
+#disable swaap memory 
+$sudo swapoff -a 
+
+$sudo systemctl daemon-reload
+
+$sudo systemctl start kubelet
+
+$ sudo systemctl enable kubelet.service
+
+Till now same for master and slave nodes===
+=========================================================
+==========================================================
+Now run the below commands in Master nodes
+========================================
+Step-3
+
+#Running and deploying kubernetes
+
+$kubeadm init #to inicialize the kubernetes
+
+$mkdir -p $HOME/ .kube
+
+$sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+
+$sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+#check nodes does connected to cluster or not
+$kubectl get nodes
+
+#deploy pod network to cluster
+$kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+#Get worker token to add slave node in cluster
+$kubeadm token create --print-join-command
+
+#copy the token of kubeadm created and peste it in slave as $sudo peste it
+
+These are all above commands whcih we use to create master node in cluser
+
+==============================================================================
+step-4
+
+let's have to run below commands to run the slave
+
+
+#get nodes
+$kubctl get nodes
+
+
+
+==================================================================================
+step-5
+
+Install kubectl in seperate node to access master node from kubectl server
+
+#to install the kubectl 
+
+$curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+
+$chmod +x ./kubectl
+
+$sudo mv ./kubectl/usr/local/bin/kubectl
+
+$kubectl version
+
+$mkdir ~/.kube
+
+note :take take kube config file from master and it keep it there
+
+$cat ~/.kube/config
+
+$vi ~/.kube/config
+
+
+$kubectl cluster info 
+
+$kubectl get nodes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
